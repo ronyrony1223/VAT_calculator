@@ -23,6 +23,11 @@
       margin-bottom: 30px;
       box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.05);
     }
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
     h2 {
       font-size: 20px;
       margin-bottom: 10px;
@@ -65,8 +70,10 @@
 </head>
 <body>
   <div class="container">
+    <h1>💸 부가세 계산기</h1>
+
     <div class="card">
-      <h2>🔢 1. 합계금액 기준 계산</h2>
+      <h2>1️⃣ 합계 금액 알고 싶으신 분</h2>
       <label for="total">합계금액 (원)</label>
       <input type="text" id="total" placeholder="예: 1100000" />
       <button id="calc1">계산</button>
@@ -75,7 +82,7 @@
     </div>
 
     <div class="card">
-      <h2>🔢 2. 공급가액 기준 계산</h2>
+      <h2>2️⃣ 공급가액 알고싶으신 분</h2>
       <label for="supply">공급가액 (원)</label>
       <input type="text" id="supply" placeholder="예: 1000000" />
       <button id="calc2">계산</button>
@@ -93,19 +100,22 @@
       return x.replace(/,/g, '');
     }
 
-    document.getElementById('total').addEventListener('input', function (e) {
-      let val = removeCommas(e.target.value);
-      if (!isNaN(val)) {
-        e.target.value = formatNumberWithCommas(val);
-      }
-    });
+    function attachCommaInputFormat(id) {
+      const input = document.getElementById(id);
+      input.addEventListener('input', function (e) {
+        const cursorPos = input.selectionStart;
+        const raw = removeCommas(input.value);
+        if (!/^\d*$/.test(raw)) return;
 
-    document.getElementById('supply').addEventListener('input', function (e) {
-      let val = removeCommas(e.target.value);
-      if (!isNaN(val)) {
-        e.target.value = formatNumberWithCommas(val);
-      }
-    });
+        const beforeLength = input.value.length;
+        input.value = formatNumberWithCommas(raw);
+        const afterLength = input.value.length;
+        input.setSelectionRange(cursorPos + (afterLength - beforeLength), cursorPos + (afterLength - beforeLength));
+      });
+    }
+
+    attachCommaInputFormat('total');
+    attachCommaInputFormat('supply');
 
     document.getElementById('calc1').addEventListener('click', function () {
       const total = parseInt(removeCommas(document.getElementById('total').value)) || 0;
