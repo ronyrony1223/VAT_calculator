@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>부가세 계산기 | 조용한 부업 연구소</title>
+  <style>
+    body {
+      background-color: #f6e9d7;
+      font-family: 'Pretendard', sans-serif;
+      color: #3b2e22;
+      margin: 0;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      color: #3b2e22;
+    }
+    .calculator {
+      background-color: #fff8ef;
+      border: 1px solid #e0cbb5;
+      border-radius: 8px;
+      max-width: 500px;
+      margin: 2rem auto;
+      padding: 2rem;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+    }
+    label {
+      font-weight: bold;
+      margin-top: 1rem;
+      display: block;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #c5ae9d;
+      border-radius: 4px;
+      background-color: #fff;
+      color: #3b2e22;
+    }
+    button {
+      background-color: #a9825a;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-right: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #8b6d4b;
+    }
+    .result {
+      margin-top: 1rem;
+      background-color: #f0e4d3;
+      padding: 1rem;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💸 부가세 계산기</h1>
+
+  <div class="calculator">
+    <h2>1️⃣ 합계금액 기준 계산</h2>
+    <label for="totalAmount">합계금액 (원)</label>
+    <input type="number" id="totalAmount" placeholder="예: 110000" />
+    <button onclick="calcFromTotal()">계산</button>
+    <button onclick="resetTotal()">초기화</button>
+    <div class="result" id="resultTotal"></div>
+  </div>
+
+  <div class="calculator">
+    <h2>2️⃣ 공급가액 기준 계산</h2>
+    <label for="supplyAmount">공급가액 (원)</label>
+    <input type="number" id="supplyAmount" placeholder="예: 100000" />
+    <button onclick="calcFromSupply()">계산</button>
+    <button onclick="resetSupply()">초기화</button>
+    <div class="result" id="resultSupply"></div>
+  </div>
+
+  <script>
+    function calcFromTotal() {
+      const total = parseFloat(document.getElementById("totalAmount").value);
+      if (!total || total <= 0) return alert("합계금액을 올바르게 입력하세요.");
+      const supply = Math.round(total / 1.1);
+      const tax = total - supply;
+      document.getElementById("resultTotal").innerHTML = `
+        💰 공급가액: ${supply.toLocaleString()}원<br>
+        💸 부가세액: ${tax.toLocaleString()}원
+      `;
+    }
+
+    function calcFromSupply() {
+      const supply = parseFloat(document.getElementById("supplyAmount").value);
+      if (!supply || supply <= 0) return alert("공급가액을 올바르게 입력하세요.");
+      const tax = Math.round(supply * 0.1);
+      const total = supply + tax;
+      document.getElementById("resultSupply").innerHTML = `
+        💰 합계금액: ${total.toLocaleString()}원<br>
+        💸 부가세액: ${tax.toLocaleString()}원
+      `;
+    }
+
+    function resetTotal() {
+      document.getElementById("totalAmount").value = "";
+      document.getElementById("resultTotal").innerHTML = "";
+    }
+
+    function resetSupply() {
+      document.getElementById("supplyAmount").value = "";
+      document.getElementById("resultSupply").innerHTML = "";
+    }
+  </script>
+
+</body>
+</html>
